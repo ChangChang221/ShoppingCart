@@ -94,5 +94,42 @@ namespace ShoppingCart.Areas.Admin.Controllers
 
             return View(category);
         }
+
+        // GET /admin/categories/delete/5
+        public async Task<IActionResult> Delete(int id)
+        {
+            Category category = await context.Categories.FindAsync(id);
+
+            if (category == null)
+            {
+                TempData["Error"] = "The category does not exist!";
+            }
+            else
+            {
+                context.Categories.Remove(category);
+                await context.SaveChangesAsync();
+
+                TempData["Success"] = "The category has been deleted!";
+            }
+
+            return RedirectToAction("Index");
+        }
+        // POST /admin/pages/categories
+        [HttpPost]
+        public async Task<IActionResult> Reorder(int[] id)
+        {
+            int count = 1;
+
+            foreach (var categoryId in id)
+            {
+                Category category = await context.Categories.FindAsync(categoryId);
+                category.Sorting = count;
+                context.Update(category);
+                await context.SaveChangesAsync();
+                count++;
+            }
+
+            return Ok();
+        }
     }
 }
