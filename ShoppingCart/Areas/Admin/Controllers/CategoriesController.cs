@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Infrastructure;
 using ShoppingCart.Models;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "admin")]
     [Area("Admin")]
     public class CategoriesController : Controller
     {

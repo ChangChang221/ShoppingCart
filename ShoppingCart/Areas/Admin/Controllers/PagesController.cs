@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using ShoppingCart.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ShoppingCart.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "admin, editor")]
     [Area("Admin")]
     public class PagesController : Controller
     {

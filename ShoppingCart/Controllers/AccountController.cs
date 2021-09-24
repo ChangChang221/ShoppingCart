@@ -97,5 +97,38 @@ namespace ShoppingCart.Controllers
 
             return Redirect("/");
         }
+        // GET /account/edit
+        public async Task<IActionResult> Edit()
+        {
+            AppUser appUser = await userManager.FindByNameAsync(User.Identity.Name);
+          
+            UserEdit user = new UserEdit(appUser);
+
+            return View(user);
+        }
+
+        // POST /account/edit
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(UserEdit user)
+        {
+            AppUser appUser = await userManager.FindByNameAsync(User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                appUser.Email = user.Email;
+                if (user.Password != null)
+                {
+                    appUser.PasswordHash = passwordHasher.HashPassword(appUser, user.Password);
+                }
+
+                IdentityResult result = await userManager.UpdateAsync(appUser);
+                if (result.Succeeded)
+                    TempData["Success"] = "Your information has been edited!";
+            }
+
+            return View();
+        }
     }
 }
